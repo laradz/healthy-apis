@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'BurgersController@index');
+Route::post('/', 'BurgersController@store');

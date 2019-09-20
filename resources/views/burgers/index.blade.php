@@ -9,7 +9,12 @@
 <div id="app" class="container">
     <h1>Burgers</h1>
     <p>A list of all burger types</p>
-    <burgers-index></burgers-index>
+
+    @if(session('added'))
+    <div class="alert-success p-2 mb-2">{{ session('added') }} burger added successfully !</div>
+    @endif
+
+    <burgers-index :burgers="{{ json_encode($burgers) }}"></burgers-index>
 
     <hr>
     <p class="font-weight-bold">New burger type?</p>

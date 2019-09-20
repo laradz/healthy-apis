@@ -1838,7 +1838,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
 //
 //
 //
@@ -1854,42 +1853,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: false,
-      addedBurger: null,
-      burgerName: null,
-      burgerPrice: null
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: {
-    addBurger: function addBurger() {
-      var _this = this;
-
-      if (this.loading) return;
-      this.loading = true;
-      axios.post('/api/burgers', {
-        name: this.burgerName,
-        price: this.burgerPrice
-      }).then(function (response) {
-        _app__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('added');
-        _this.addedBurger = _this.burgerName;
-        setTimeout(function () {
-          _this.addedBurger = null;
-        }, 2000);
-        _this.burgerName = null;
-        _this.burgerPrice = null;
-        _this.loading = false;
-      })["catch"](function (err) {
-        console.log(err.response);
-        _this.loading = false;
-      });
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -1903,7 +1873,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
 //
 //
 //
@@ -1912,40 +1881,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      loading: true,
-      burgers: []
-    };
-  },
-  mounted: function mounted() {
-    var _this = this;
-
-    this.loadBurgers();
-    this.$nextTick(function () {
-      _app__WEBPACK_IMPORTED_MODULE_0__["default"].$on('added', function () {
-        _this.loadBurgers();
-      });
-    });
-  },
-  methods: {
-    loadBurgers: function loadBurgers() {
-      var _this2 = this;
-
-      this.loading = true;
-      axios.get('/api/burgers').then(function (response) {
-        _this2.burgers = response.data.burgers;
-        _this2.loading = false;
-      })["catch"](function (err) {
-        console.log(err.response);
-      });
+  props: {
+    burgers: {
+      type: Array,
+      required: true
     }
-  }
+  },
+  data: function data() {
+    return {};
+  },
+  mounted: function mounted() {},
+  methods: {}
 });
 
 /***/ }),
@@ -37244,80 +37191,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "w-50" }, [
-    _vm.addedBurger
-      ? _c("div", { staticClass: "alert-success p-2 mb-2" }, [
-          _vm._v(_vm._s(_vm.addedBurger) + " burger added successfully !")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
+  return _c(
+    "form",
+    { staticClass: "w-50", attrs: { method: "POST", action: "/" } },
+    [
+      _c("input", {
+        attrs: { type: "hidden", name: "_token" },
+        domProps: { value: _vm.csrf }
+      }),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary text-white",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("Add")]
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
       _c("label", [_vm._v("Burger name")]),
       _vm._v(" "),
       _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.burgerName,
-            expression: "burgerName"
-          }
-        ],
         staticClass: "form-control",
-        attrs: { type: "text" },
-        domProps: { value: _vm.burgerName },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.burgerName = $event.target.value
-          }
-        }
+        attrs: { name: "name", type: "text" }
       })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
       _c("label", [_vm._v("Burger price")]),
       _vm._v(" "),
       _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.burgerPrice,
-            expression: "burgerPrice"
-          }
-        ],
         staticClass: "form-control",
-        attrs: { type: "text" },
-        domProps: { value: _vm.burgerPrice },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.burgerPrice = $event.target.value
-          }
-        }
+        attrs: { name: "price", type: "text" }
       })
-    ]),
-    _vm._v(" "),
-    _c(
-      "a",
-      {
-        staticClass: "btn btn-primary text-white",
-        on: { click: _vm.addBurger }
-      },
-      [
-        _vm._v(
-          "\n        " + _vm._s(_vm.loading ? "Adding..." : "Add") + "\n    "
-        )
-      ]
-    )
-  ])
-}
-var staticRenderFns = []
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -37339,28 +37264,20 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.loading
-      ? _c("div", [_vm._v("Burgers are loading...")])
-      : _c(
-          "div",
-          _vm._l(_vm.burgers, function(burger) {
-            return _c("div", [
-              _vm._v(
-                "\n            " +
-                  _vm._s(burger.id) +
-                  " - " +
-                  _vm._s(burger.name) +
-                  " "
-              ),
-              _c("span", { staticClass: "font-italic" }, [
-                _vm._v("(" + _vm._s(burger.price) + " DA)")
-              ])
-            ])
-          }),
-          0
-        )
-  ])
+  return _c(
+    "div",
+    _vm._l(_vm.burgers, function(burger) {
+      return _c("div", [
+        _vm._v(
+          "\n        " + _vm._s(burger.id) + " - " + _vm._s(burger.name) + " "
+        ),
+        _c("span", { staticClass: "font-italic" }, [
+          _vm._v("(" + _vm._s(burger.price) + " DA)")
+        ])
+      ])
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
